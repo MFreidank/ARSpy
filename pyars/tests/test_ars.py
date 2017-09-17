@@ -1,4 +1,4 @@
-from numpy import log, exp, array_equal
+from numpy import log, exp, array_equal, asarray
 from subprocess import check_output
 
 from os.path import dirname, realpath, join
@@ -17,12 +17,15 @@ def call_julia(name, a, b, n_samples, domain):
 
     reference_script = join(reference_implementation_path, "reference.jl")
 
-    output = check_output(
-        ["julia", reference_script, name, a, b, n_samples, *domain]
+    julia_binary = join(
+        reference_implementation_path, "julia-ae26b25d43", "bin", "julia"
     )
-    # XXX: Parse julia result from output, convert to python types and return it
 
-    julia_result = output
+    output = check_output(
+        [julia_binary, reference_script, name, a, b, n_samples, *domain]
+    ).decode()
+
+    julia_result = asarray(output.strip("[]").split(","))
 
     return julia_result
 
@@ -41,10 +44,10 @@ tests = {
                     "domain": (float("-inf"), float("inf")),
                     "n_samples": 20000},
     "1d-half-gaussian": {"name": "1d-half-gaussian",
-                          "func": half_gaussian,
-                          "a": -2, "b": 0,
-                          "domain": [float("-inf"), 0],
-                          "n_samples": 20000},
+                         "func": half_gaussian,
+                         "a": -2, "b": 0,
+                         "domain": [float("-inf"), 0],
+                         "n_samples": 20000},
     # XXX: Add external function from arsDemo.m (third example)
     # XXX: Add logpdf from relativistic monte carlo as well
 
