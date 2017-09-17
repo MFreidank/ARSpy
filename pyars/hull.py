@@ -108,30 +108,21 @@ def compute_hulls(S, fS, domain):
             upper_hull.append(HullNode(m=m2, b=b2, pr=pr2, left=ix, right=S[li + 1]))
 
     # second last line
-    # XXX: Requires careful porting - "end" is completely unclear as of now
-    """
-    m = (fS[end-1]-fS[end-2])/(S[end-1]-S[end-2])
-    b = fS[end-1] - m*S[end-1]
-    pr = computeSegmentLogProb(S[end-1], S[end], m ,b)
-    upper_hull.append(HullNode(m=m, b=b, pr=pr, left=S[end - 1], right=S[end]))
-    """
-    m = None
-    b = None
-    pr = None
+    m = (fS[-2] - fS[-3]) / (S[-2] - S[-3])
+    b = fS[-2] - m * S[-2]
+    pr = compute_segment_log_prob(S[-2], S[-1], m, b)
+    upper_hull.append(HullNode(m=m, b=b, pr=pr, left=S[-2], right=S[-1]))
 
     i += 1
 
-    # XXX Here same problem
-    """
     if isinf(domain[1]):
         # last line (to infinity)
-        m = (fS[end] - fS[end - 1]) / (S[end] - S[end - 1])
-        b = fS[end] - m * S[end]
-        pr = compute_segment_log_prob(S[end], float("inf"), m , b)
+        m = (fS[-1] - fS[-1 - 1]) / (S[-1] - S[-1 - 1])
+        b = fS[-1] - m * S[-1]
+        pr = compute_segment_log_prob(S[-1], float("inf"), m, b)
 
         i += 1
-        upper_hull.append(HullNode(m=m, b=b, pr=pr, left=S[end], right=float("inf")))
-    """
+        upper_hull.append(HullNode(m=m, b=b, pr=pr, left=S[-1], right=float("inf")))
 
     Z = sum(node.pr for node in upper_hull)
 
