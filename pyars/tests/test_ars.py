@@ -2,6 +2,7 @@ from numpy import log, exp, array_equal, asarray
 from subprocess import check_output
 
 from os.path import dirname, realpath, join
+from os import getenv
 
 from pyars.ars import adaptive_rejection_sampling
 
@@ -17,9 +18,7 @@ def call_julia(name, a, b, n_samples, domain):
 
     reference_script = join(reference_implementation_path, "reference.jl")
 
-    julia_binary = join(
-        reference_implementation_path, "julia-ae26b25d43", "bin", "julia"
-    )
+    julia_binary = getenv("PYARS_JULIA_BIN")
 
     output = check_output(
         [julia_binary, reference_script, name, a, b, n_samples, *domain]
@@ -74,7 +73,6 @@ def _run(test_name):
     )
 
     assert(array_equal(julia_result, python_result))
-
 
 def test_gaussian():
     _run("1d-gaussian")

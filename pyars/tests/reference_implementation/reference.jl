@@ -7,7 +7,7 @@ function gaussian(x; sigma=1)
     log(exp(-x ^ 2 / sigma))
 end
 
-function half_gaussian(x; sigma=3):
+function halfgaussian(x; sigma=3)
     log(exp(-x ^ 2 / sigma)) * (1 * (x <= 0) + 1e300 * (x > 0))
 end
 
@@ -42,7 +42,7 @@ domain = [domain_left, domain_right]
 if name == "1d-gaussian"
    result = ars(gaussian, a, b, domain, nSamples) 
 elseif name == "1d-half-gaussian"
-   result = ars(half_gaussian, a, b, domain, nSamples) 
+   result = ars(halfgaussian, a, b, domain, nSamples) 
 end
 println(result)
 
