@@ -54,8 +54,9 @@ def compute_hulls(S, fS, domain):
     upper_hull.append(HullNode(m=m, b=b, pr=pr, left=S[0], right=S[1]))
 
     # interior lines
+    # there are two lines between each abscissa
     for li in range(1, len(S) - 2):
-        m1 = (fS[li] - fS[li - 1]) / S[li] - S[li - 1]
+        m1 = (fS[li] - fS[li - 1]) / (S[li] - S[li - 1])
         b1 = fS[li] - m1 * S[li]
 
         m2 = (fS[li + 2] - fS[li + 1]) / (S[li + 2] - S[li + 1])
@@ -84,7 +85,7 @@ def compute_hulls(S, fS, domain):
             pr2 = compute_segment_log_prob(ix, S[li + 1], m2, b2)
         elif isinf(m2):
             ix = S[li + 1]
-            pr1 = compute_segment_log_prob(S[li], ix, m1, b2)
+            pr1 = compute_segment_log_prob(S[li], ix, m1, b1)
             pr2 = float("-inf")
         else:
             if isinf(ix):
@@ -108,6 +109,7 @@ def compute_hulls(S, fS, domain):
             upper_hull.append(HullNode(m=m2, b=b2, pr=pr2, left=ix, right=S[li + 1]))
 
     # second last line
+    # XXX Double check "end" mapping in small dummy script
     m = (fS[-2] - fS[-3]) / (S[-2] - S[-3])
     b = fS[-2] - m * S[-2]
     pr = compute_segment_log_prob(S[-2], S[-1], m, b)
@@ -154,7 +156,7 @@ def sample_upper_hull(upper_hull):
     # randomly choose a line segment
     U = rand()
 
-    node = next(node for node, cdf_value in zip(upper_hull, cdf) if U < cdf_value)
+    node = next((node for node, cdf_value in zip(upper_hull, cdf) if U < cdf_value), upper_hull[-1])
 
     # sample along that line segment
     U = rand()
