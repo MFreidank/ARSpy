@@ -1,4 +1,4 @@
-from numpy import sign, log
+from numpy import sign, log, unique, arange
 from numpy.random import rand
 from pyars.hull import compute_hulls, evaluate_hulls, sample_upper_hull
 
@@ -18,24 +18,28 @@ def adaptive_rejection_sampling(logpdf,
     if domain[0] == float("-inf"):
         # ensure positive derivative at 'a'
         derivative_sign = sign(logpdf(a + n_derivative_steps) - logpdf(a))
-        positive_derivative = derivative_sign == 1
+        positive_derivative = derivative_sign > 0
 
         assert(positive_derivative), "derivative at 'a' must be positive, since the domain is unbounded to the left"
 
     if domain[1] == float("inf"):
         # ensure negative derivative at 'b'
-        derivative_sign = sign(logpdf(b - n_derivative_steps) - logpdf(b))
-        negative_derivative = derivative_sign == -1
+        derivative_sign = sign(logpdf(b) - logpdf(b - n_derivative_steps))
+        negative_derivative = derivative_sign < 0
 
         assert(negative_derivative), "derivative at 'b' must be negative, since the domain is unbounded to the right"
 
     # initialize a mesh on which to create upper & lower hulls
     n_initial_mesh_points = 3
 
-    # XXX: set construction
-    S_set = None
+    S_set = unique(
+        [S[0],
+         *(arange(S[1], S[2], (S[2] - S[1]) / (n_initial_mesh_points + 1.))),
+         S[3]]
+    )
 
-    fS = tuple(logpdf(s) for s in S)
+    fS = tuple(logpdf(s) for s in S_set)
+    assert(len(S_set) == len(fS))
 
     lower_hull, upper_hull = compute_hulls(S_set, fS, domain)
 
@@ -71,8 +75,10 @@ def adaptive_rejection_sampling(logpdf,
 
         if mesh_changed:
             S_set = sorted([*S, x])
-            fS = tuple(logpdf(s) for s in S)
-            lower_hull, upper_hull = compute_hulls(S_set, fS, domain)
+            fS = tuple(logpdf(s) for s in S_set)
+            assert(len(S_set) == len(fS))
+
+            lower_hull, upper_hull = compute_hulls(S=S_set, fS=fS, domain=domain)
 
         n_iterations += 1
 

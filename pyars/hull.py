@@ -1,23 +1,23 @@
 from numpy import asarray, isinf, isnan, spacing as eps, log, exp, cumsum
 from numpy.random import rand
-from pyars.probability_utils import exp_normalize  # XXX: Need to port this
+from pyars.probability_utils import exp_normalize
 
 # XXX: Globally check "isinf" usage: it also returns true for -inf, so
 # make sure this is desired wherever we use it
 
 
 class HullNode(object):
-    def __init__(self, m, b, left, right, pr):
+    def __init__(self, m, b, left, right, pr=None):
         self.m, self.b = m, b
         self.left, self.right = left, right
         self.pr = pr
 
 
 def compute_hulls(S, fS, domain):
+    assert(len(S) == len(fS))
 
     lower_hull = []
 
-    # NOTE: Refactor below with enumerate (and possibly zip)
     for li in range(len(S) - 1):
         m = (fS[li + 1] - fS[li]) / (S[li + 1] - S[li])
         b = fS[li] - m * S[li]
