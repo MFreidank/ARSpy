@@ -129,6 +129,7 @@ function ars(logpdf::Function, a::Float64, b::Float64, domain::Vector{Float64}, 
 end
 
 function arsComputeHulls(S, fS, domain)
+    print("(", S, ", ", fS, ", ", domain, "): ")
 
     # compute lower piecewise-linear hull
     # if the domain of logpdf is unbounded to the left or right, then the lower
@@ -300,6 +301,7 @@ function arsComputeHulls(S, fS, domain)
             upperHull[li].pr = probs[li]
     end
 
+    println("(", lowerHull, ", ", upperHull, "), ")
     (lowerHull, upperHull)
 end
 

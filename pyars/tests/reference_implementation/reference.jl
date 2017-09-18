@@ -40,6 +40,14 @@ end
 # Change this to parse from args
 domain = [domain_left, domain_right]
 
+n_rand_calls = 0
+function rand()
+    cmd = `python -c "from numpy.random import rand, seed; seed(1); [rand() for _ in range($n_rand_calls)]; print(rand())"`
+    global n_rand_calls += 1
+    rand_val = readall(cmd)
+    return parse(Float64, rand_val)
+end
+
 if name == "1d-gaussian"
    result = ars(gaussian, a, b, domain, nSamples) 
 elseif name == "1d-half-gaussian"
