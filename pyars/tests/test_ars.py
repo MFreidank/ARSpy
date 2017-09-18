@@ -24,7 +24,7 @@ def call_julia(name, a, b, n_samples, domain):
         [julia_binary, reference_script, name, a, b, n_samples, *domain]
     ).decode()
 
-    julia_result = asarray(output.strip("[]").split(","))
+    julia_result = asarray(list(map(float, output.strip("[]\n").split(","))))
 
     return julia_result
 
@@ -35,6 +35,7 @@ def gaussian(x, sigma=1):
 
 def half_gaussian(x, sigma=3):
     return log(exp(-x ** 2 / sigma)) * (1 * (x <= 0) + 1e300 * (x > 0))
+
 
 tests = {
     "1d-gaussian": {"name": "1d-gaussian",
@@ -73,6 +74,7 @@ def _run(test_name):
     )
 
     assert(array_equal(julia_result, python_result))
+
 
 def test_gaussian():
     _run("1d-gaussian")

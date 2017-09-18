@@ -1,4 +1,4 @@
-from numpy import sign, log, unique, arange
+from numpy import sign, log, unique, arange, isinf
 from numpy.random import rand
 from pyars.hull import compute_hulls, evaluate_hulls, sample_upper_hull
 
@@ -9,7 +9,8 @@ def adaptive_rejection_sampling(logpdf,
                                 n_samples: int):
     assert(domain[1] >= domain[0]), "Invalid domain"
 
-    # XXX: Assert a and b
+    if a >= b or isinf(a) or isinf(b) or a < domain[0] or b > domain[1]:
+        raise ValueError("invalid a and b")
 
     n_derivative_steps = 1e-3 * (b - a)
 
@@ -32,16 +33,16 @@ def adaptive_rejection_sampling(logpdf,
     # initialize a mesh on which to create upper & lower hulls
     n_initial_mesh_points = 3
 
-    S_set = unique(
+    S = unique(
         [S[0],
          *(arange(S[1], S[2], (S[2] - S[1]) / (n_initial_mesh_points + 1.))),
          S[3]]
     )
 
-    fS = tuple(logpdf(s) for s in S_set)
-    assert(len(S_set) == len(fS))
+    fS = tuple(logpdf(s) for s in S)
+    assert(len(S) == len(fS))
 
-    lower_hull, upper_hull = compute_hulls(S_set, fS, domain)
+    lower_hull, upper_hull = compute_hulls(S=S, fS=fS, domain=domain)
 
     n_samples_now = 0
     n_iterations = 1
@@ -74,11 +75,10 @@ def adaptive_rejection_sampling(logpdf,
             mesh_changed = True
 
         if mesh_changed:
-            S_set = sorted([*S, x])
-            fS = tuple(logpdf(s) for s in S_set)
-            assert(len(S_set) == len(fS))
+            S = sorted([*S, x])
+            fS = tuple(logpdf(s) for s in S)
 
-            lower_hull, upper_hull = compute_hulls(S=S_set, fS=fS, domain=domain)
+            lower_hull, upper_hull = compute_hulls(S=S, fS=fS, domain=domain)
 
         n_iterations += 1
 

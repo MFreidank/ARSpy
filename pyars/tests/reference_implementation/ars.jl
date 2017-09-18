@@ -154,7 +154,6 @@ function arsComputeHulls(S, fS, domain)
             # first line (from -infinity)
             m = (fS[2]-fS[1])/(S[2]-S[1]);
             b = fS[1] - m*S[1];
-            #pr = 1/m*( exp(m*S[1]+b) - 0 ); # integrating in from -infinity
             pr = computeSegmentLogProb(-Inf, S[1], m, b)
 
             i += 1
@@ -170,7 +169,6 @@ function arsComputeHulls(S, fS, domain)
     # second line
     m = (fS[3]-fS[2])/(S[3]-S[2]);
     b = fS[2] - m*S[2];
-    #pr = 1/m * ( exp(m*S[2]+b) - exp(m*S[1]+b) );
     pr = computeSegmentLogProb(S[1], S[2], m, b)
 
 
@@ -200,7 +198,6 @@ function arsComputeHulls(S, fS, domain)
             end
 
 
-            #ix = (b1-b2)/(m2-m1); # compute the two lines' intersection
 
             dx1 = S[li]-S[li-1]
             df1 = fS[li]-fS[li-1]
@@ -213,17 +210,14 @@ function arsComputeHulls(S, fS, domain)
             x2 = S[li+1]
  
             # more numerically stable than above 
-            #ix = (b1-b2)*dx1*dx2 / ( df2*dx1 - df1*dx2)
             ix = ((f1*dx1-df1*x1)*dx2 - (f2*dx2-df2*x2)*dx1) / ( df2*dx1 - df1*dx2)
 
             if !isfinite(m1) || abs(m1-m2) < 10.0^8 * eps(m1)
                 ix = S[li]
                 pr1 = -Inf
-                #pr2 = 1.0/m2 * ( exp(m2*S[li+1]+b2) - exp(m2*ix+b2) );
                 pr2 = computeSegmentLogProb(ix, S[li+1], m2, b2)
             elseif !isfinite(m2)
                 ix = S[li+1]
-                #pr1 = 1.0/m1 * ( exp(m1*ix+b1) - exp(m1*S[li]+b1) );
                 pr1 = computeSegmentLogProb(S[li], ix, m1, b1)
                 pr2 = -Inf
             else
@@ -247,8 +241,6 @@ function arsComputeHulls(S, fS, domain)
                     error("Intersection out of bounds -- logpdf is not concave")
                 end
 
-#                pr1 = 1.0/m1 * ( exp(m1*ix+b1) - exp(m1*S[li]+b1) );
-#                pr2 = 1.0/m2 * ( exp(m2*S[li+1]+b2) - exp(m2*ix+b2) );
                 pr1 = computeSegmentLogProb(S[li], ix, m1, b1)
                 pr2 = computeSegmentLogProb(ix, S[li+1], m2, b2)
             end
@@ -276,7 +268,6 @@ function arsComputeHulls(S, fS, domain)
     # second last line
     m = (fS[end-1]-fS[end-2])/(S[end-1]-S[end-2]);
     b = fS[end-1] - m*S[end-1];
-    #pr = 1.0/m * ( exp(m*S[end]+b) - exp(m*S[end-1]+b) );
     pr = computeSegmentLogProb(S[end-1], S[end], m ,b)
 
     i += 1
@@ -291,7 +282,6 @@ function arsComputeHulls(S, fS, domain)
             # last line (to infinity)
             m = (fS[end]-fS[end-1])/(S[end]-S[end-1]);
             b = fS[end] - m*S[end];
-            #pr = 1.0/m * ( 0 - exp(m*S[end]+b) );
             pr = computeSegmentLogProb(S[end], Inf, m, b)
 
 
@@ -304,11 +294,6 @@ function arsComputeHulls(S, fS, domain)
             upperHull[i].right = Inf;
     end
 
-#    Z = sum([upperHull[i].pr for i = 1:length(upperHull)]);
-#    #lprintln([upperHull[i].pr for i = 1:length(upperHull)]);
-#    for li=1:length(upperHull)
-#            upperHull[li].pr = upperHull[li].pr / Z;
-#    end
 
     probs = exp_normalize([upperHull[i].pr for i = 1:length(upperHull)])
     for li=1:length(upperHull)
@@ -319,7 +304,6 @@ function arsComputeHulls(S, fS, domain)
 end
 
 function computeSegmentLogProb(l, r, m, b)
-    #1.0/m * (exp(m*r+b) - exp(m*l+b))
     if l == -Inf
         return -log(m) + m*r+b 
     elseif r == Inf
@@ -342,7 +326,6 @@ function arsSampleUpperHull( upperHull )
             end
     end
 
-    #lprintln(cdf)
 
     # sample along that line segment
     U = rand();
@@ -354,7 +337,6 @@ function arsSampleUpperHull( upperHull )
 
     M = max(m*right, m*left)
 
-    #x = (log( U*(exp(m*right+b) - exp(m*left+b)) + exp(m*left+b) ) - b) / m ;
     x = (log( U*(exp(m*right-M) - exp(m*left-M)) + exp(m*left-M) ) + M) / m ;
 
 
