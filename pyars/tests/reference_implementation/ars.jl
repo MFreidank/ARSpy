@@ -129,7 +129,6 @@ function ars(logpdf::Function, a::Float64, b::Float64, domain::Vector{Float64}, 
 end
 
 function arsComputeHulls(S, fS, domain)
-    print("(", S, ", ", fS, ", ", domain, "): ")
 
     # compute lower piecewise-linear hull
     # if the domain of logpdf is unbounded to the left or right, then the lower
@@ -301,7 +300,6 @@ function arsComputeHulls(S, fS, domain)
             upperHull[li].pr = probs[li]
     end
 
-    println("(", lowerHull, ", ", upperHull, "), ")
     (lowerHull, upperHull)
 end
 
@@ -309,16 +307,13 @@ function computeSegmentLogProb(l, r, m, b)
     # print("[\"", l, "\", \"", r, "\", \"", m, "\", \"", b, "\"]: ")
     if l == -Inf
         result = -log(m) + m*r+b 
-        # println("\"", result, "\"")
         return -log(m) + m*r+b 
     elseif r == Inf
         result = -log(-m) + m*l+b 
-        # println("\"", result, "\",")
         return -log(-m) + m*l+b 
     else
         M = max(m*r+b, m*l+b)
         result = -log(abs(m)) + log(abs(exp(m*r+b-M) - exp(m*l+b-M))) + M 
-        # println("\"", result, "\"")
         return -log(abs(m)) + log(abs(exp(m*r+b-M) - exp(m*l+b-M))) + M 
     end
 end
