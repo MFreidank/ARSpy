@@ -144,10 +144,11 @@ def compute_segment_log_prob(l, r, m, b):
         return -log(m) + m * r + b
 
     elif r == float("inf"):
-        return -log(m) + m * l + b
+        return -log(-m) + m * l + b
+
     M = max(m * r + b, m * l + b)
 
-    return -log(abs(m)) + log(abs(exp(m * r + b - M) - exp(m * l + b - M))) + M
+    return -log(abs(m)) + log(abs(exp(m*r+b-M) - exp(m*l+b-M))) + M
 
 
 def sample_upper_hull(upper_hull):

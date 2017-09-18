@@ -11,7 +11,7 @@ function halfgaussian(x; sigma=3)
     log(exp(-x ^ 2 / sigma)) * (1 * (x <= 0) + 1e300 * (x > 0))
 end
 
-println(ARGS)
+# println(ARGS)
 name = ARGS[1]
 a = parse(Float64, ARGS[2])
 b = parse(Float64, ARGS[3])

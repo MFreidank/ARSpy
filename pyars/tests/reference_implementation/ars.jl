@@ -304,12 +304,19 @@ function arsComputeHulls(S, fS, domain)
 end
 
 function computeSegmentLogProb(l, r, m, b)
+    # print("[\"", l, "\", \"", r, "\", \"", m, "\", \"", b, "\"]: ")
     if l == -Inf
+        result = -log(m) + m*r+b 
+        # println("\"", result, "\"")
         return -log(m) + m*r+b 
     elseif r == Inf
+        result = -log(-m) + m*l+b 
+        # println("\"", result, "\",")
         return -log(-m) + m*l+b 
     else
         M = max(m*r+b, m*l+b)
+        result = -log(abs(m)) + log(abs(exp(m*r+b-M) - exp(m*l+b-M))) + M 
+        # println("\"", result, "\"")
         return -log(abs(m)) + log(abs(exp(m*r+b-M) - exp(m*l+b-M))) + M 
     end
 end

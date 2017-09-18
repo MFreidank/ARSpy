@@ -20,8 +20,10 @@ def call_julia(name, a, b, n_samples, domain):
 
     julia_binary = getenv("PYARS_JULIA_BIN")
 
+    cmd = [julia_binary, reference_script, name, a, b, n_samples, *domain]
+    print("CMD:", cmd)
     output = check_output(
-        [julia_binary, reference_script, name, a, b, n_samples, *domain]
+        cmd
     ).decode()
 
     julia_result = asarray(list(map(float, output.strip("[]\n").split(","))))
