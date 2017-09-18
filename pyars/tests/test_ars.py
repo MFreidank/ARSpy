@@ -77,7 +77,7 @@ def _run(test_name):
         logpdf=logpdf, a=a, b=b, domain=domain, n_samples=n_samples
     )
 
-    assert(allclose(julia_result, python_result, atol=1e-01))
+    assert(allclose(julia_result, python_result, atol=5e-01))
 
 
 """
