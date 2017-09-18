@@ -9,4 +9,4 @@ Install
 
 Simply run::
 
-    pip3 install git+https://github.com/MFreidank/pysgmcmc
+    pip3 install git+https://github.com/MFreidank/pyARS
