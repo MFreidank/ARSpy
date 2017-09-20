@@ -1,0 +1,26 @@
+language: python
+python:
+    - "3.5"
+
+os:
+    - linux
+
+
+before_install:
+    - sudo apt-get update
+    - sudo apt-get install -q libatlas3gf-base libatlas-dev liblapack-dev gfortran
+
+
+install:
+  - pip install --upgrade pip
+  - pip install cython
+  - travis_wait pip install -r requirements.txt
+  - pip install pytest-cov
+  - python setup.py install
+  - pip install coveralls 
+
+script: 
+    - py.test -v --cov=pyars
+
+after_success:
+    - coveralls
