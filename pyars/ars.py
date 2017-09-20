@@ -74,15 +74,4 @@ def adaptive_rejection_sampling(logpdf,
             S = sorted([*S, x])
             fS = tuple(logpdf(s) for s in S)
             lower_hull, upper_hull = compute_hulls(S=S, fS=fS, domain=domain)
-
-    with open("/tmp/no.txt") as f:
-        i = int(f.read())
-
-    with open("/tmp/no.txt", "w") as f:
-        f.write(str(i + 1))
-
-    with open("/tmp/results_{}".format(i), "w") as f:
-        for sample in samples:
-            f.write(str(sample) + "\n")
-
     return samples
