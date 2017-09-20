@@ -2,13 +2,13 @@ from os.path import realpath, dirname, join as path_join
 from setuptools import setup, find_packages
 
 
-name = "pyARS"
-description = "PyARS"
+name = "ARSpy"
+description = "ARSpy"
 long_description = "Adaptive Rejection Sampling for Python - Matlab Style"
 maintainer = "Moritz Freidank"
 maintainer_email = "freidankm@googlemail.com"
 
-url = "https://github.com/MFreidank/pyARS"
+url = "https://github.com/MFreidank/ARSpy"
 
 version = "0.1"
 
@@ -30,7 +30,7 @@ if __name__ == "__main__":
         maintainer_email=maintainer_email,
         description=description,
         url=url,
-        download_url="https://github.com/MFreidank/pyARS/archive/0.1.tar.gz",
+        download_url="https://github.com/MFreidank/ARSpy/archive/0.1.tar.gz",
         long_description=long_description,
         packages=find_packages(),
         keyword=["sampling", "adaptive rejection sampling", "adaptive", "rejection", "ars"],
