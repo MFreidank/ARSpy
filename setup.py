@@ -32,7 +32,7 @@ if __name__ == "__main__":
         url=url,
         long_description=long_description,
         packages=find_packages(),
-        kyword=["sampling", "adaptive rejection sampling", "adaptive", "rejection", "ars"]
+        keyword=["sampling", "adaptive rejection sampling", "adaptive", "rejection", "ars"],
         # package_data={"docs": ["*"]},
         # include_package_data=True,
         install_requires=install_requirements,
