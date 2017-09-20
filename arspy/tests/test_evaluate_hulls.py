@@ -1,6 +1,6 @@
 from numpy import allclose
 
-from pyars.hull import evaluate_hulls, HullNode as hn
+from arspy.hull import evaluate_hulls, HullNode as hn
 
 
 def test_evaluate_hulls():

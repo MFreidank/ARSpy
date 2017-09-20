@@ -1,6 +1,6 @@
 from numpy import asarray, isinf, isnan, spacing as eps, log, exp, cumsum
 from numpy.random import rand
-from pyars.probability_utils import exp_normalize
+from arspy.probability_utils import exp_normalize
 
 
 class HullNode(object):

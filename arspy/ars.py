@@ -1,6 +1,6 @@
 from numpy import sign, log, unique, linspace, isinf
 from numpy.random import rand
-from pyars.hull import compute_hulls, evaluate_hulls, sample_upper_hull
+from arspy.hull import compute_hulls, evaluate_hulls, sample_upper_hull
 
 
 def adaptive_rejection_sampling(logpdf,

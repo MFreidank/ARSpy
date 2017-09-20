@@ -4,7 +4,7 @@ import numpy as np
 
 from os.path import dirname, realpath, join
 
-from pyars.ars import adaptive_rejection_sampling
+from arspy.ars import adaptive_rejection_sampling
 
 
 data_file = "{}/ars_{{}}.npy".format(

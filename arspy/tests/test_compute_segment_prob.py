@@ -1,6 +1,6 @@
 from math import isclose
 
-from pyars.hull import compute_segment_log_prob
+from arspy.hull import compute_segment_log_prob
 
 
 def test_valid_inputs():

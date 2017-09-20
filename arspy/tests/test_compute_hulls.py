@@ -1,5 +1,5 @@
 from numpy.random import seed
-from pyars.hull import compute_hulls, HullNode as hn
+from arspy.hull import compute_hulls, HullNode as hn
 
 
 def test_compute_hulls():
