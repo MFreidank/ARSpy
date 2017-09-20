@@ -12,7 +12,7 @@ Install
 
 Simply run::
 
-    pip3 install git+https://github.com/MFreidank/ARSpy
+   pip3 install ARSpy
 
 .. |Build Status| image:: https://travis-ci.org/MFreidank/pyARS.svg?branch=master
     :target: https://travis-ci.org/MFreidank/pyARS
