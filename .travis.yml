@@ -9,7 +9,7 @@ os:
 before_install:
     - sudo apt-get update
     - sudo apt-get install -q libatlas3gf-base libatlas-dev liblapack-dev gfortran
-    - export PYARS_JULIA_BIN="./pyars/tests/reference_implementation/julia-ae26b25d43/bin/julia"
+    - export PYARS_JULIA_BIN=`readlink -f ./pyars/tests/reference_implementation/julia-ae26b25d43/bin/julia`
 
 
 install:
