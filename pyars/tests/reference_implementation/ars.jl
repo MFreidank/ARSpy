@@ -26,7 +26,7 @@ include("probability_utils.jl")
 #
 #   nSamples    number of samples to draw
 #
-function ars(logpdf::Function, a::Float64, b::Float64, domain::Vector{Float64}, nSamples::Int)
+function ars(logpdf::Function, a::Float64, b::Float64, domain::Vector{Float64}, nSamples::Int, debug_output)
     debug = false
 
     if domain[1] >= domain[2]
@@ -91,11 +91,23 @@ function ars(logpdf::Function, a::Float64, b::Float64, domain::Vector{Float64}, 
             if log(U)<=lhVal-uhVal
                     # accept, u is below lower bound
                     nSamplesNow = nSamplesNow + 1;
+                    if debug_output == "debug"
+                        println("Sample", x)
+                        println(lhVal, uhVal)
+                        println(S, fS, domain)
+                        println("")
+                    end
                     samples[nSamplesNow] = x;
 
             elseif log(U)<=logpdf(x )-uhVal
                     # accept, u is between lower bound and f
                     nSamplesNow = nSamplesNow + 1;
+                    if debug_output == "debug"
+                        println("Sample", x)
+                        println(lhVal, uhVal)
+                        println(S, fS, domain)
+                        println("")
+                    end
                     samples[nSamplesNow] = x;
 
                     meshChanged = 1;

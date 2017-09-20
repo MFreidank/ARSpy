@@ -1,4 +1,4 @@
-from numpy import log, exp, allclose, asarray
+from numpy import log, exp, allclose, asarray, sqrt
 from numpy.random import seed
 from subprocess import check_output
 
@@ -21,7 +21,7 @@ def call_julia(name, a, b, n_samples, domain):
 
     julia_binary = getenv("PYARS_JULIA_BIN")
 
-    cmd = [julia_binary, reference_script, name, a, b, n_samples, *domain]
+    cmd = [julia_binary, reference_script, name, a, b, n_samples, *domain, "nodebug"]
     print("CMD:", cmd)
     output = check_output(
         cmd
@@ -40,19 +40,29 @@ def half_gaussian(x, sigma=3):
     return log(exp(-x ** 2 / sigma)) * (1 * (x <= 0) + 1e300 * (x > 0))
 
 
+def relativistic_momentum_logpdf(p, m=1., c=1.):
+    return -m * c ** 2 * sqrt(p ** 2 / (m ** 2 * c ** 2) + 1)
+
+
 tests = {
     "1d-gaussian": {"name": "1d-gaussian",
                     "func": gaussian,
                     "a": -2, "b": 2,
                     "domain": (float("-inf"), float("inf")),
-                    "n_samples": 20000},
+                    "n_samples": 20},
     "1d-half-gaussian": {"name": "1d-half-gaussian",
                          "func": half_gaussian,
                          "a": -2, "b": 0,
                          "domain": [float("-inf"), 0],
                          "n_samples": 20},
     # XXX: Add external function from arsDemo.m (third example)
-    # XXX: Add logpdf from relativistic monte carlo as well
+    "relativistic_monte_carlo_logpdf": {
+        "name": "relativistic_momentum_logpdf",
+        "func": relativistic_momentum_logpdf,
+        "a": -10.0, "b": 10.0,
+        "domain": [float("-inf"), float("inf")],
+        "n_samples": 20
+    }
 
 }
 
@@ -77,14 +87,15 @@ def _run(test_name):
         logpdf=logpdf, a=a, b=b, domain=domain, n_samples=n_samples
     )
 
-    assert(allclose(julia_result, python_result, atol=5e-01))
+    assert(allclose(julia_result, python_result, atol=3e-01))
 
 
-"""
 def test_gaussian():
     _run("1d-gaussian")
-"""
 
 
 def test_half_gaussian():
     _run("1d-half-gaussian")
+
+def test_relativistic_monte_carlo_logpdf():
+    _run("relativistic_monte_carlo_logpdf")

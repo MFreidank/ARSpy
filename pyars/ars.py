@@ -1,4 +1,4 @@
-from numpy import sign, log, unique, arange, isinf
+from numpy import sign, log, unique, linspace, isinf
 from numpy.random import rand
 from pyars.hull import compute_hulls, evaluate_hulls, sample_upper_hull
 
@@ -33,13 +33,17 @@ def adaptive_rejection_sampling(logpdf,
     # initialize a mesh on which to create upper & lower hulls
     n_initial_mesh_points = 3
 
+    print("Early INITIAL S:", S)
     S = unique(
         [S[0],
-         *(arange(S[1], S[2], (S[2] - S[1]) / (n_initial_mesh_points + 1.))),
-         S[3]]
-    )
+         #*(arange(S[1], S[2], (S[2] - S[1]) / (n_initial_mesh_points + 1.))),
+         *(linspace(S[1], S[2], num=n_initial_mesh_points + 2)),
+         S[3]])
+
 
     fS = tuple(logpdf(s) for s in S)
+    print("INITIAL S:", S)
+    print("INITIAL fS:", fS)
     assert(len(S) == len(fS))
 
     lower_hull, upper_hull = compute_hulls(S=S, fS=fS, domain=domain)
@@ -60,12 +64,19 @@ def adaptive_rejection_sampling(logpdf,
 
         if log(U) <= lh_val - uh_val:
             # accept u is below lower bound
+            print("Sample:", x)
+            print(lh_val, uh_val)
+            print(S, fS, domain)
             n_samples_now += 1
             samples.append(x)
 
         elif log(U) <= logpdf(x) - uh_val:
             # accept, u is between lower bound and f
             n_samples_now += 1
+            print("Sample:", x)
+            print(lh_val, uh_val)
+            print(S, fS, domain)
+            print()
             samples.append(x)
 
             mesh_changed = True
