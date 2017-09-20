@@ -4,6 +4,7 @@ ARSPY
 
 |Build Status|
 |Coverage_|
+|Pypi_|
 
 Adaptive Rejection Sampling for Python
 
@@ -20,3 +21,6 @@ Simply run::
 .. |Coverage_| image:: https://coveralls.io/repos/github/MFreidank/pyARS/badge.svg
    :target: https://coveralls.io/github/MFreidank/pyARS
    :alt: Coverage
+
+.. |Pypi_| image:: https://badge.fury.io/py/ARSpy.svg
+    :target: https://badge.fury.io/py/ARSpy
