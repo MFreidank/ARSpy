@@ -19,7 +19,7 @@ install:
   - pip install coveralls 
 
 script: 
-    - py.test -v --cov=pyars
+    - py.test -v --cov=arspy
 
 after_success:
     - coveralls
