@@ -15,8 +15,8 @@ Simply run::
 
    pip3 install ARSpy
 
-.. |Build Status| image:: https://travis-ci.org/MFreidank/pyARS.svg?branch=master
-    :target: https://travis-ci.org/MFreidank/pyARS
+.. |Build Status| image:: https://travis-ci.org/MFreidank/ARSpy.svg?branch=master
+    :target: https://travis-ci.org/MFreidank/ARSpy
 
 .. |Coverage_| image:: https://coveralls.io/repos/github/MFreidank/pyARS/badge.svg
    :target: https://coveralls.io/github/MFreidank/pyARS
