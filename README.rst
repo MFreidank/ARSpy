@@ -31,12 +31,6 @@ Simply run::
 
    pip3 install ARSpy
 
-
-Documentation
-=============
-Our documentation can be found at http://arspy.readthedocs.io/en/latest/.
-
-
 .. |Build Status| image:: https://travis-ci.org/MFreidank/ARSpy.svg?branch=master
     :target: https://travis-ci.org/MFreidank/ARSpy
 
@@ -50,3 +44,7 @@ Our documentation can be found at http://arspy.readthedocs.io/en/latest/.
 
 .. |Pypi_| image:: https://badge.fury.io/py/ARSpy.svg
     :target: https://badge.fury.io/py/ARSpy
+
+Documentation
+=============
+Our documentation can be found at http://arspy.readthedocs.io/en/latest/.
