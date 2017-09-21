@@ -10,7 +10,10 @@ maintainer_email = "freidankm@googlemail.com"
 
 url = "https://github.com/MFreidank/ARSpy"
 
-version = "0.2"
+version = "0.3"
+download_url = "https://github.com/MFreidank/ARSpy/archive/{}.tar.gz".format(
+    version
+)
 
 project_root = dirname(realpath(__file__))
 requirements_file = path_join(project_root, "requirements.txt")
@@ -30,7 +33,7 @@ if __name__ == "__main__":
         maintainer_email=maintainer_email,
         description=description,
         url=url,
-        download_url="https://github.com/MFreidank/ARSpy/archive/0.2.tar.gz",
+        download_url=download_url,
         long_description=long_description,
         packages=find_packages(),
         keyword=["sampling", "adaptive rejection sampling", "adaptive", "rejection", "ars"],
