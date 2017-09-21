@@ -20,6 +20,10 @@ __all__ = (
     "adaptive_rejection_sampling",
 )
 
+__author__ = (
+    "Moritz Freidank"
+)
+
 
 def adaptive_rejection_sampling(logpdf: callable,
                                 a: float, b: float,
