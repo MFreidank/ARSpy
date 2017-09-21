@@ -16,6 +16,10 @@ from numpy.random import rand
 from arspy.hull import compute_hulls, evaluate_hulls, sample_upper_hull
 from typing import Tuple
 
+__all__ = (
+    "adaptive_rejection_sampling",
+)
+
 
 def adaptive_rejection_sampling(logpdf: callable,
                                 a: float, b: float,

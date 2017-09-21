@@ -2,6 +2,14 @@ from numpy import asarray, isinf, isnan, spacing as eps, log, exp, cumsum
 from numpy.random import rand
 from arspy.probability_utils import exp_normalize
 
+__all__ = (
+    "HullNode",
+    "compute_hulls",
+    "evaluate_hulls",
+    "sample_upper_hull",
+    "compute_segment_log_prob",
+)
+
 
 class HullNode(object):
     def __init__(self, m, b, left, right, pr=0.0):
@@ -205,6 +213,7 @@ def sample_upper_hull(upper_hull):
     Parameters
     ----------
     upper_hull : List[pyars.hull.HullNode]
+        Upper hull to evaluate.
 
     Returns
     ----------
