@@ -10,7 +10,7 @@ maintainer_email = "freidankm@googlemail.com"
 
 url = "https://github.com/MFreidank/ARSpy"
 
-version = "0.1"
+version = "0.2"
 
 project_root = dirname(realpath(__file__))
 requirements_file = path_join(project_root, "requirements.txt")
