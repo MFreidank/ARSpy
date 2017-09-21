@@ -30,7 +30,7 @@ if __name__ == "__main__":
         maintainer_email=maintainer_email,
         description=description,
         url=url,
-        download_url="https://github.com/MFreidank/ARSpy/archive/0.1.tar.gz",
+        download_url="https://github.com/MFreidank/ARSpy/archive/0.2.tar.gz",
         long_description=long_description,
         packages=find_packages(),
         keyword=["sampling", "adaptive rejection sampling", "adaptive", "rejection", "ars"],
