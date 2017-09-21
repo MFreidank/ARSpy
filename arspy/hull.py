@@ -35,7 +35,37 @@ class HullNode(object):
 
 
 def compute_hulls(S, fS, domain):
+    """
+    (Re-)compute upper and lower hull given
+    the segment points `S` with function values
+    `fS` and the `domain` of the logpdf.
 
+    Parameters
+    ----------
+    S : np.ndarray (N, 1)
+       Straight-line segment points accumulated thus far.
+
+    fS : tuple
+        Value of the `logpdf` under sampling for each
+        of the given segment points in `S`.
+
+    domain : Tuple[float, float]
+        Domain of `logpdf`.
+        May be unbounded on either or both sides,
+        in which case `(float("-inf"), float("inf"))`
+        would be passed.
+        If this domain is unbounded to the left,
+        the derivative of the logpdf
+        for x<= a must be positive.
+        If this domain is unbounded to the right                  the derivative of the logpdf for x>=b
+        must be negative.
+
+    Returns
+    ----------
+    lower_hull: List[arspy.hull.HullNode]
+    upper_hull: List[arspy.hull.HullNode]
+
+    """
     assert(len(S) == len(fS))
     assert(len(domain) == 2)
 
@@ -168,6 +198,20 @@ def compute_segment_log_prob(l, r, m, b):
 
 
 def sample_upper_hull(upper_hull):
+    """
+    Return a single value randomly sampled from
+    the given `upper_hull`.
+
+    Parameters
+    ----------
+    upper_hull : List[pyars.hull.HullNode]
+
+    Returns
+    ----------
+    sample : float
+        Single value randomly sampled from `upper_hull`.
+
+    """
     cdf = cumsum([node.pr for node in upper_hull])
 
     # randomly choose a line segment
