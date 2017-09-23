@@ -38,7 +38,7 @@ Simply run::
    :target: https://coveralls.io/github/MFreidank/pyARS
    :alt: Coverage
 
-.. |Docs_| image:: https://readthedocs.org/projects/ARSpy/badge/?version=latest
+.. |Docs_| image:: https://readthedocs.org/projects/arspy/badge/?version=latest
    :target: http://ARSpy.readthedocs.io/en/latest/
    :alt: Docs
 
