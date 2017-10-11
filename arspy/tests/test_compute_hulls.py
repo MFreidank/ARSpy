@@ -1,10 +1,8 @@
-from numpy.random import seed
 from arspy.hull import compute_hulls, HullNode as hn
 
 
 def test_compute_hulls():
 
-    seed(1)
 
     def HullNode(m, b, left, right, pr):
         return hn(m=m, b=b, left=left, right=right, pr=pr)

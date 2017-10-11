@@ -1,5 +1,4 @@
 from numpy import asarray, isinf, isnan, spacing as eps, log, exp, cumsum
-from numpy.random import rand
 from arspy.probability_utils import exp_normalize
 
 __all__ = (
@@ -205,7 +204,7 @@ def compute_segment_log_prob(l, r, m, b):
     return -log(abs(m)) + log(abs(exp(m * r + b - M) - exp(m * l + b - M))) + M
 
 
-def sample_upper_hull(upper_hull):
+def sample_upper_hull(upper_hull, random_stream):
     """
     Return a single value randomly sampled from
     the given `upper_hull`.
@@ -214,6 +213,9 @@ def sample_upper_hull(upper_hull):
     ----------
     upper_hull : List[pyars.hull.HullNode]
         Upper hull to evaluate.
+
+    random_stream : numpy.random.RandomState
+        (Seeded) stream of random values to use during sampling.
 
     Returns
     ----------
@@ -224,7 +226,7 @@ def sample_upper_hull(upper_hull):
     cdf = cumsum([node.pr for node in upper_hull])
 
     # randomly choose a line segment
-    U = rand()
+    U = random_stream.rand()
 
     node = next(
         (node for node, cdf_value in zip(upper_hull, cdf) if U < cdf_value),
@@ -232,7 +234,7 @@ def sample_upper_hull(upper_hull):
     )
 
     # sample along that line segment
-    U = rand()
+    U = random_stream.rand()
 
     m, left, right = node.m, node.left, node.right
 

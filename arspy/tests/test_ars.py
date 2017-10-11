@@ -1,5 +1,4 @@
 from numpy import log, exp, allclose, sqrt
-from numpy.random import seed
 import numpy as np
 
 from os.path import dirname, realpath, join
@@ -50,7 +49,6 @@ tests = {
 
 
 def _run(test_name):
-    seed(1)
     input_dict = tests[test_name]
 
     # name = input_dict["name"]
@@ -62,7 +60,7 @@ def _run(test_name):
     logpdf = input_dict["func"]
 
     python_result = adaptive_rejection_sampling(
-        logpdf=logpdf, a=a, b=b, domain=domain, n_samples=n_samples
+        logpdf=logpdf, a=a, b=b, domain=domain, n_samples=n_samples, seed=1
     )
 
     # load old result computed by other implementation (julia)

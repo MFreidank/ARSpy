@@ -12,7 +12,8 @@ of the logpdf as input to our sampler, only the logpdf itself.
 Our code is a port of an original matlab code in pmtk3 by Daniel Eaton (danieljameseaton@gmail.com) and compared to an open-source julia port (by Levi Boyles) of the same matlab function for testing purposes.
 """
 from numpy import sign, log, unique, linspace, isinf
-from numpy.random import rand
+from numpy.random import RandomState
+import numpy as np
 from arspy.hull import compute_hulls, evaluate_hulls, sample_upper_hull
 from typing import Tuple
 
@@ -28,7 +29,8 @@ __author__ = (
 def adaptive_rejection_sampling(logpdf: callable,
                                 a: float, b: float,
                                 domain: Tuple[float, float],
-                                n_samples: int):
+                                n_samples: int,
+                                seed=None):
     """
     Adaptive rejection sampling samples exactly (all samples are i.i.d) and efficiently from any univariate log-concave distribution. The basic idea is to successively determine an envelope of straight-line segments to construct an increasingly accurate approximation of the logarithm.
     It does not require any normalization of the target distribution.
@@ -58,11 +60,15 @@ def adaptive_rejection_sampling(logpdf: callable,
         If this domain is unbounded to the left,
         the derivative of the logpdf
         for x<= a must be positive.
-        If this domain is unbounded to the right                  the derivative of the logpdf for x>=b
+        If this domain is unbounded to the right the derivative of the logpdf for x>=b
         must be negative.
 
     n_samples: int
         Number of samples to draw.
+
+    seed : int, optional
+        Random seed to use.
+        Defaults to `None`.
 
     Returns
     ----------
@@ -92,6 +98,11 @@ def adaptive_rejection_sampling(logpdf: callable,
     assert(len(domain) == 2), "Domain must be two-element iterable."
     assert(domain[1] >= domain[0]), "Invalid domain, it must hold: domain[1] >= domain[0]."
     assert(n_samples >= 0), "Number of samples must be >= 0."
+
+    assert seed is None or isinstance(seed, (int, np.int)), "Seed must be integer value or `None`!"
+    assert seed is None or 0 <= seed <= 2 ** 32 - 1, "Integer seeds must be >=0 and <= 2 ** 32 - 1"
+
+    random_stream = RandomState(seed)
 
     if a >= b or isinf(a) or isinf(b) or a < domain[0] or b > domain[1]:
         raise ValueError("invalid a and b")
@@ -131,11 +142,11 @@ def adaptive_rejection_sampling(logpdf: callable,
 
         mesh_changed = False
 
-        x = sample_upper_hull(upper_hull)
+        x = sample_upper_hull(upper_hull, random_stream=random_stream)
 
         lh_val, uh_val = evaluate_hulls(x, lower_hull, upper_hull)
 
-        U = rand()
+        U = random_stream.rand()
 
         if log(U) <= lh_val - uh_val:
             # accept u is below lower bound
