@@ -30,7 +30,7 @@ def adaptive_rejection_sampling(logpdf: callable,
                                 a: float, b: float,
                                 domain: Tuple[float, float],
                                 n_samples: int,
-                                seed=None):
+                                seed=None, random_stream=None):
     """
     Adaptive rejection sampling samples exactly (all samples are i.i.d) and efficiently from any univariate log-concave distribution. The basic idea is to successively determine an envelope of straight-line segments to construct an increasingly accurate approximation of the logarithm.
     It does not require any normalization of the target distribution.
@@ -70,6 +70,12 @@ def adaptive_rejection_sampling(logpdf: callable,
         Random seed to use.
         Defaults to `None`.
 
+    random_stream : RandomState, optional
+        Seeded random number generator object with same interface as NumPy
+        RandomState. Alternative to specifying `seed` for use in code which
+        already has instantiated a random number generator. Will be ignored if
+        `seed` is not `None`. Defaults to `None`.
+
     Returns
     ----------
     samples : list
@@ -101,8 +107,11 @@ def adaptive_rejection_sampling(logpdf: callable,
 
     assert seed is None or isinstance(seed, (int, np.int)), "Seed must be integer value or `None`!"
     assert seed is None or 0 <= seed <= 2 ** 32 - 1, "Integer seeds must be >=0 and <= 2 ** 32 - 1"
+    assert seed is None or random_stream is None, (
+        "Only one of `seed` or `random_stream` should be specified.")
 
-    random_stream = RandomState(seed)
+    if random_stream is None:
+        random_stream = RandomState(seed)
 
     if a >= b or isinf(a) or isinf(b) or a < domain[0] or b > domain[1]:
         raise ValueError("invalid a and b")

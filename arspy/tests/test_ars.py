@@ -48,7 +48,7 @@ tests = {
 }
 
 
-def _run(test_name):
+def _run(test_name, use_random_stream=False):
     input_dict = tests[test_name]
 
     # name = input_dict["name"]
@@ -59,9 +59,15 @@ def _run(test_name):
 
     logpdf = input_dict["func"]
 
-    python_result = adaptive_rejection_sampling(
-        logpdf=logpdf, a=a, b=b, domain=domain, n_samples=n_samples, seed=1
-    )
+    if use_random_stream:
+        python_result = adaptive_rejection_sampling(
+            logpdf=logpdf, a=a, b=b, domain=domain, n_samples=n_samples, seed=1
+        )
+    else:
+        python_result = adaptive_rejection_sampling(
+            logpdf=logpdf, a=a, b=b, domain=domain, n_samples=n_samples,
+            random_stream=np.random.RandomState(seed=1)
+        )
 
     # load old result computed by other implementation (julia)
     julia_result = np.load(input_dict["data"])
@@ -70,12 +76,15 @@ def _run(test_name):
 
 
 def test_gaussian():
-    _run("1d-gaussian")
+    _run("1d-gaussian", True)
+    _run("1d-gaussian", False)
 
 
 def test_half_gaussian():
-    _run("1d-half-gaussian")
+    _run("1d-half-gaussian", True)
+    _run("1d-half-gaussian", False)
 
 
 def test_relativistic_monte_carlo_logpdf():
-    _run("relativistic_monte_carlo_logpdf")
+    _run("relativistic_monte_carlo_logpdf", True)
+    _run("relativistic_monte_carlo_logpdf", False)
