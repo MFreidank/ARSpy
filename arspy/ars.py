@@ -30,7 +30,7 @@ def adaptive_rejection_sampling(logpdf: callable,
                                 a: float, b: float,
                                 domain: Tuple[float, float],
                                 n_samples: int,
-                                seed=None, random_stream=None):
+                                random_stream=None):
     """
     Adaptive rejection sampling samples exactly (all samples are i.i.d) and efficiently from any univariate log-concave distribution. The basic idea is to successively determine an envelope of straight-line segments to construct an increasingly accurate approximation of the logarithm.
     It does not require any normalization of the target distribution.
@@ -66,15 +66,11 @@ def adaptive_rejection_sampling(logpdf: callable,
     n_samples: int
         Number of samples to draw.
 
-    seed : int, optional
-        Random seed to use.
-        Defaults to `None`.
-
     random_stream : RandomState, optional
-        Seeded random number generator object with same interface as NumPy
-        RandomState. Alternative to specifying `seed` for use in code which
-        already has instantiated a random number generator. Will be ignored if
-        `seed` is not `None`. Defaults to `None`.
+        Seeded random number generator object with same interface as a NumPy
+        RandomState object. Defaults to `None` in which case a NumPy
+        RandomState seeded from `/dev/urandom` if available or the clock if not
+        will be used.
 
     Returns
     ----------
@@ -105,13 +101,8 @@ def adaptive_rejection_sampling(logpdf: callable,
     assert(domain[1] >= domain[0]), "Invalid domain, it must hold: domain[1] >= domain[0]."
     assert(n_samples >= 0), "Number of samples must be >= 0."
 
-    assert seed is None or isinstance(seed, (int, np.int)), "Seed must be integer value or `None`!"
-    assert seed is None or 0 <= seed <= 2 ** 32 - 1, "Integer seeds must be >=0 and <= 2 ** 32 - 1"
-    assert seed is None or random_stream is None, (
-        "Only one of `seed` or `random_stream` should be specified.")
-
     if random_stream is None:
-        random_stream = RandomState(seed)
+        random_stream = RandomState()
 
     if a >= b or isinf(a) or isinf(b) or a < domain[0] or b > domain[1]:
         raise ValueError("invalid a and b")
