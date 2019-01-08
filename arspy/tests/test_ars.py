@@ -60,7 +60,8 @@ def _run(test_name):
     logpdf = input_dict["func"]
 
     python_result = adaptive_rejection_sampling(
-        logpdf=logpdf, a=a, b=b, domain=domain, n_samples=n_samples, seed=1
+        logpdf=logpdf, a=a, b=b, domain=domain, n_samples=n_samples,
+        random_stream=np.random.RandomState(seed=1)
     )
 
     # load old result computed by other implementation (julia)
